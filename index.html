@@ -1,0 +1,677 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Anna Brabcová – UI/UX & Product Designer</title>
+<meta name="description" content="Portfolio Anny Brabcové (Ancys), UI/UX a produktové designérky. Moje cesta, hodnoty a vybrané projekty.">
+<meta name="author" content="Anna Brabcová">
+<meta name="theme-color" content="#6956B5">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Anna Brabcová – UI/UX & Product Designer">
+<meta property="og:description" content="Moje cesta, hodnoty a vybrané projekty. Pojďme spolu vytvořit něco skvělého.">
+<meta property="og:image" content="https://annabrabcova.cz/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://annabrabcova.cz/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Inter+Tight:wght@400;500;600&display=swap">
+<style>
+/* Layout: Anna's Figma one pager. White paper lit by sun through a window; a pencil line carries the story down the page; ends in a purple takeover. */
+:root{
+  color-scheme:light;
+  --purple:#CDA7FF; --deep:#6956B5; --ink:#1D1D1D; --paper:#FFFFFF;
+  --gray:#D9D9D9; --muted:#5B5660; --line:#E6E3EA;
+  --display:"Anton","Impact","Arial Narrow",sans-serif;
+  --body:"Inter Tight",ui-sans-serif,system-ui,sans-serif;
+  --ease:cubic-bezier(0.32,0.72,0,1);
+  /* type system (Anna) */
+  --gap:200px;
+  /* colour roles: deep purple = accent, lavender = soft surface and glow */
+  --nav-on-bg:var(--deep); --nav-on-fg:var(--paper);
+  --ff-bg:var(--deep); --ff-fg:var(--paper);
+  --cbtn-bg:var(--paper); --cbtn-fg:var(--ink);
+  --final-bg:var(--deep); --final-fg:var(--paper);
+  --glow:105,86,181;
+  /* page colours driven by time of day (JS): white morning to #1D1D1D night */
+  --bg:var(--paper); --fg:var(--ink); --fg-muted:var(--muted); --kicker:var(--deep); --icon-filter:none; --ff-back:#EEEAFB; --art-filter:none;
+}
+@media (max-width:900px){:root{--gap:120px}}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+html,body{overflow-x:clip}
+body{background:var(--bg);color:var(--fg);transition:color .6s var(--ease);font:400 16px/22px var(--body);margin:0;-webkit-font-smoothing:antialiased}
+::selection{background:var(--purple);color:var(--ink)}
+.wrap{max-width:1440px;margin:0 auto;padding-left:max(60px,env(safe-area-inset-left,0px));padding-right:max(60px,env(safe-area-inset-right,0px))}
+@media (max-width:900px){.wrap{padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px))}}
+@media (max-width:480px){.wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}}
+h1,h2,h3,h4{margin:0;font-family:var(--display);font-weight:400;text-transform:uppercase;letter-spacing:0;text-wrap:balance}
+p{margin:0;text-wrap:pretty}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+:focus-visible{outline:2px solid var(--deep);outline-offset:4px;border-radius:6px}
+.kicker{font-size:14px;line-height:20px;font-weight:500;color:var(--kicker);transition:color .6s var(--ease);letter-spacing:.02em}
+.hero .kicker{font-size:16px;line-height:22px;font-weight:400;color:var(--fg);letter-spacing:0}
+
+/* sun shadow over the whole page */
+/* the page walks through one day on scroll: long morning shadows, faint noon, golden evening, night lit by street lamps (values set in JS) */
+.sunwrap{position:fixed;inset:0;z-index:50;pointer-events:none;mix-blend-mode:multiply;opacity:.95;transform-origin:15% 0;will-change:transform,opacity,filter}
+.sun{position:absolute;inset:-6vh -6vw;background:url(assets/shadow.webp) center top/cover no-repeat;animation:sway 14s ease-in-out infinite alternate;transform-origin:20% 0}
+.sun::after{content:"";position:absolute;inset:0;background:inherit;mix-blend-mode:multiply;opacity:var(--s2,0)}
+.lamp{position:fixed;inset:-8vh -8vw;z-index:52;pointer-events:none;mix-blend-mode:screen;opacity:0;background:url(assets/lamp.webp) center/cover no-repeat;transform:scaleX(-1) rotate(-6deg) scale(1.1);
+  -webkit-mask-image:radial-gradient(ellipse 50% 65% at 80% 30%,#000 25%,transparent 75%);mask-image:radial-gradient(ellipse 50% 65% at 80% 30%,#000 25%,transparent 75%);will-change:opacity}
+@keyframes sway{0%{transform:translate3d(0,0,0) rotate(0deg) scale(1.02)}100%{transform:translate3d(1.5vw,.8vh,0) rotate(.8deg) scale(1.04)}}
+
+/* letter roll hover (navbar kept from previous version) */
+.roll{display:inline-flex;overflow:hidden;line-height:20px;height:20px;vertical-align:top}
+.roll .ch{display:inline-flex;flex-direction:column;transition:transform .6s var(--ease)}
+.roll .ch span{height:20px;display:block;white-space:pre}
+.hov:hover .roll .ch,.hov:focus-visible .roll .ch{transform:translateY(-20px)}
+
+.top{position:fixed;inset:0 0 auto;z-index:60;padding-top:calc(env(safe-area-inset-top,0px) + 16px);pointer-events:none;opacity:0;transform:translateY(-24px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.top.show{opacity:1;transform:none}
+.top:not(.show) *{pointer-events:none!important}
+.top .wrap{display:flex;justify-content:center}
+.top .wrap>*{pointer-events:auto}
+.logo{font-size:14px;line-height:20px;font-weight:600;display:inline-flex;align-items:center;gap:8px;justify-self:start}
+.logo i{width:20px;height:20px;border-radius:6px;background:var(--purple);display:block;transition:transform .8s var(--ease)}
+.logo:hover i{transform:rotate(90deg)}
+.nav{display:flex;gap:2px;padding:4px;border-radius:999px;background:rgba(255,255,255,.7);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--line)}
+.nav a{font-size:14px;padding:8px 14px;border-radius:999px;color:var(--muted)}
+.nav a.on{background:var(--nav-on-bg);color:var(--nav-on-fg)}
+.copy{justify-self:end;font:inherit;font-size:14px;font-weight:500;color:var(--ink);background:rgba(255,255,255,.7);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--line);border-radius:999px;padding:8px 16px;cursor:pointer;transition:background .5s var(--ease),border-color .5s var(--ease)}
+.copy:hover{border-color:var(--ink)}
+.copy.done{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+@media (max-width:560px){.nav a{padding:8px 10px;font-size:13px}}
+
+/* hero */
+.hero{position:relative;height:100svh;min-height:640px;max-height:980px;display:grid;place-items:center;text-align:center;overflow:hidden}
+.hero .kicker{margin-bottom:16px}
+.hero h1{font-size:clamp(67px,10.7vw,154px);line-height:1.078}
+.hero h1 .ln{display:block;overflow:hidden;padding-top:.04em}
+.hero h1 .ln span{display:inline-block;transition:transform 1.3s var(--ease)}
+.hero .kicker{transition:opacity 1s var(--ease) .5s,transform 1s var(--ease) .5s}
+.pre .hero h1 .ln span{transform:translateY(105%)}
+.hero h1 .rot{display:grid;justify-items:center}
+.hero h1 .rot .rw{grid-area:1/1;transform:translateY(130%);transition:transform 1s var(--ease)}
+.hero h1 .rot .rw.on{transform:none}
+.hero h1 .rot .rw.out{transform:translateY(-130%)}
+.pre .hero h1 .rot .rw.on{transform:translateY(130%)}
+.pre .hero .kicker{opacity:0;transform:translateY(8px)}
+.pin{position:absolute;left:0;top:0;cursor:grab;touch-action:none;user-select:none;-webkit-user-drag:none;will-change:transform;z-index:3}
+.pin img{pointer-events:none;width:100%;transition:filter .4s var(--ease)}
+.pin.drag{cursor:grabbing;z-index:4}
+.pin.drag img{filter:drop-shadow(0 18px 18px rgba(0,0,0,.18))}
+.hint{position:absolute;left:50%;bottom:32px;transform:translateX(-50%);font-size:14px;line-height:20px;color:var(--fg-muted);display:flex;gap:8px;align-items:center;white-space:nowrap}
+.hint .hand{display:inline-block;animation:nudge 2.4s var(--ease) infinite}
+@keyframes nudge{0%,100%{transform:translateX(0)}50%{transform:translateX(6px)}}
+
+/* full-screen statement, words load on scroll */
+.statement{height:180vh;position:relative}
+.statement .stage{position:sticky;top:0;height:100svh;display:grid;place-items:center;text-align:center}
+.statement p{font-size:32px;line-height:40px;font-weight:500;max-width:none}
+@media (max-width:700px){.statement p .lb{display:none}}
+@media (max-width:560px){.statement p{font-size:26px;line-height:34px}}
+.wd{color:color-mix(in srgb,var(--fg) 30%,transparent);transition:color .5s var(--ease)}
+.wd.lit{color:var(--fg)}
+
+/* journey with pencil line */
+.journey{position:relative;padding-block:0 80px}
+.journey .pencil{position:absolute;left:50%;top:0;width:40px;margin-left:-20px;overflow:visible;pointer-events:none}
+.journey .pencil path{fill:none;stroke:var(--fg);stroke-width:1.6;stroke-linecap:round;opacity:.75}
+.journey .tip{position:absolute;left:50%;width:9px;height:9px;margin:-4px 0 0 -4px;border-radius:50%;background:var(--ink);top:0;opacity:0;transition:opacity .4s}
+.row{display:grid;grid-template-columns:1fr 1fr;column-gap:120px;position:relative;padding-bottom:var(--gap)}
+.row.r4{padding-bottom:0}
+.ms{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;align-content:start;max-width:520px;min-width:0;position:relative;transition:opacity 1.1s var(--ease),transform 1.1s var(--ease),filter 1.1s var(--ease)}
+.ms.right{grid-column:2}
+.js .ms:not(.on){opacity:0;transform:translateY(48px);filter:blur(8px)}
+.ms h2{font-size:clamp(40px,4.45vw,64px);line-height:1.125}
+.ms p.body{max-width:360px}
+.r4 .ms{max-width:640px}
+@media (min-width:1200px){.r4 .ms h2{white-space:nowrap}}
+
+/* photo + fun fact */
+.duo{position:relative;margin-top:40px;width:538px;max-width:100%;height:384px}
+.photo{position:absolute;left:0;top:0;width:288px;height:384px;border-radius:16px;background:#E2E1E6;overflow:visible}
+.photo .clip{position:absolute;inset:0;border-radius:16px;overflow:hidden}
+.photo .clip img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.flip{position:absolute;left:236px;top:250px;width:220px;height:88px;font:inherit;border:0;padding:0;background:none;cursor:pointer;perspective:900px;color:inherit;transition:width .9s var(--ease),height .9s var(--ease),top .9s var(--ease),left .9s var(--ease)}
+.flip .in{position:absolute;inset:0;transform-style:preserve-3d;transition:transform 1s var(--ease)}
+.flip.wiggle .in{animation:wiggle 1s var(--ease)}
+@keyframes wiggle{0%,100%{transform:rotate(0)}20%{transform:rotate(-4deg) scale(1.03)}40%{transform:rotate(3deg) scale(1.03)}60%{transform:rotate(-2deg)}80%{transform:rotate(1deg)}}
+.flip[aria-pressed="true"]{width:420px;height:190px;top:140px;left:196px}
+.flip[aria-pressed="true"] .in{transform:rotateY(180deg)}
+.flip .face{position:absolute;inset:0;border-radius:16px;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:grid;place-items:center;padding:16px}
+.flip .front{background:var(--ff-bg);color:var(--ff-fg);box-shadow:0 12px 30px -12px rgba(105,86,181,.5);transition:background .5s var(--ease)}
+.flip .front span{font-family:var(--display);font-size:48px;line-height:48px;text-transform:uppercase}
+.flip .front small{position:absolute;right:12px;bottom:8px;font-size:12px;line-height:16px;opacity:.75}
+.flip .back{background:var(--ff-back);color:var(--ink);transform:rotateY(180deg);text-align:left;place-items:start;align-content:center;padding:40px;font-size:16px;line-height:22px}
+.flip .back b{font-family:var(--display);font-weight:400;text-transform:uppercase;font-size:20px;line-height:28px;display:block;margin-bottom:4px}
+@media (max-width:560px){
+  .duo{height:auto;display:grid;gap:16px;width:100%}
+  .photo,.flip{position:relative;left:auto;top:auto}
+  .photo{width:100%;max-width:288px;height:auto;aspect-ratio:3/4}
+  .flip{width:220px;height:88px;top:auto}
+  .flip[aria-pressed="true"]{width:100%;height:290px;top:auto;left:auto}
+}
+
+/* levitating logos */
+.logo-card{animation:float 6s ease-in-out infinite;will-change:transform}
+.logo-card img{width:100%}
+@keyframes float{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-16px) rotate(0)}}
+.r2-right{display:flex;flex-direction:column;gap:32px;min-width:0}
+.r2-left{display:flex;align-items:center;justify-content:flex-end;min-width:0}
+.lw{max-width:none}
+.lw-svijany{width:266px;align-self:flex-end;margin-right:20px}
+.lw-svijany .logo-card{animation-duration:7s}
+.lw-ocni{width:271px;margin-right:-60px;margin-top:120px}
+.lw-ocni .logo-card{animation-duration:6s;animation-delay:-2s}
+.lw-tren{width:240px;margin-left:200px}
+.lw-tren .logo-card{animation-duration:8s;animation-delay:-4s}
+
+.video{position:relative;display:block;margin-top:16px;width:464px;max-width:100%;aspect-ratio:16/9;border-radius:16px;background:#000;border:0;padding:0;overflow:hidden;cursor:zoom-in}
+.video video{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s var(--ease)}
+.video:hover video{transform:scale(1.04)}
+.video .vzoom{position:absolute;right:12px;bottom:12px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.92);display:grid;place-items:center;transition:transform .4s var(--ease)}
+.video:hover .vzoom{transform:scale(1.1)}
+.video .vzoom svg{width:18px;height:18px}
+/* click-to-enlarge lightbox for the Share Yourself video */
+.lbox{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:24px;background:rgba(14,14,16,.9);opacity:0;pointer-events:none;transition:opacity .45s var(--ease)}
+.lbox.open{opacity:1;pointer-events:auto}
+.lbox video{width:min(1400px,100%);max-height:86vh;border-radius:16px;background:#000;transform:scale(.9);transition:transform .55s var(--ease)}
+.lbox.open video{transform:scale(1)}
+.lbox .lx{position:absolute;top:20px;right:20px;width:44px;height:44px;border-radius:50%;border:0;background:var(--paper);color:var(--ink);font-size:26px;line-height:1;cursor:pointer}
+/* language switch, sits in the hero only */
+.lang{position:absolute;top:24px;left:50%;transform:translateX(-50%);z-index:6;display:flex;gap:2px;padding:4px;border-radius:999px;background:rgba(255,255,255,.7);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--line)}
+.lang button{font:inherit;font-size:14px;padding:6px 12px;border-radius:999px;border:0;background:none;color:var(--muted);cursor:pointer}
+.lang button[aria-pressed="true"]{background:var(--deep);color:var(--paper)}
+@media (max-width:900px){.lang{top:16px}}
+
+@media (max-width:900px){
+  .journey .pencil{left:12px;margin-left:-20px}
+  .journey .tip{left:12px}
+  .row{grid-template-columns:minmax(0,1fr);padding-left:40px}
+  .ms.right{grid-column:1}
+  .row.r2{display:flex;flex-direction:column;gap:24px}
+  .r2-left{justify-content:flex-start}
+  .lw-ocni{width:150px;margin:0}
+  .lw-svijany{width:150px;margin:0}
+  .lw-tren{width:140px;margin-left:auto}
+  .r2-right{gap:24px}
+}
+
+/* five things */
+.traits{height:170vh;position:relative}
+.traits .stage{position:sticky;top:0;min-height:100svh;display:grid;align-items:start;padding-block:80px}
+.traits .grid{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:48px;align-items:center}
+.traits .say{font-size:32px;line-height:40px;font-weight:500;max-width:460px}
+.example{display:none;margin-top:32px;max-width:400px;gap:4px;transition:opacity .4s var(--ease),transform .4s var(--ease)}
+.example.swap{opacity:0;transform:translateY(8px)}
+.example b{font-family:var(--display);font-weight:400;text-transform:uppercase;font-size:20px;line-height:26px;color:var(--deep)}
+.example span{color:var(--fg-muted)}
+@media (max-width:560px){.traits .say{font-size:26px;line-height:34px}}
+.traits .say small{display:block;margin-top:24px;font-size:14px;line-height:20px;color:var(--fg-muted);letter-spacing:0;font-weight:400}
+.deck{position:relative;width:min(100%,calc((100svh - 160px)*840/740));max-width:840px;aspect-ratio:840/740;justify-self:end}
+.tcard{position:absolute;border:0;padding:0;background:none;cursor:pointer;transition:left .9s var(--ease),top .9s var(--ease),transform .5s var(--ease),filter .5s var(--ease)}
+.tcard img{width:100%;pointer-events:none;filter:var(--art-filter) drop-shadow(0 10px 18px rgba(60,40,110,.12))}
+.tcard:not(.front):hover{transform:translateY(-10px) rotate(-1.5deg)}
+.tcard.front{cursor:default}
+.tcard.wig img{animation:cardwig 1.1s var(--ease)}
+@keyframes cardwig{0%,100%{transform:rotate(0)}20%{transform:rotate(-5deg) translateY(-6px)}45%{transform:rotate(4deg)}70%{transform:rotate(-2deg)}}
+@media (max-width:900px){.traits .grid{grid-template-columns:1fr}.deck{justify-self:center}}
+
+/* projects */
+.projects{padding-block:40px var(--gap)}
+.projects .title{font-size:clamp(56px,8.9vw,128px);line-height:1.078;text-align:center;margin-bottom:80px}
+.proj{perspective:1400px;margin-bottom:var(--gap)}
+.proj:last-child{margin-bottom:0}
+.proj .inner{transform-origin:50% 100%;will-change:transform}
+.proj .yr{display:block;margin-bottom:8px;color:var(--fg)}
+.proj h3{font-size:clamp(40px,4.45vw,64px);line-height:1.125}
+.facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:48px;margin-top:40px;max-width:900px}
+@media (max-width:760px){.facts{grid-template-columns:1fr;gap:24px}}
+.fact h4{font-family:var(--body);text-transform:none;font-weight:500;font-size:20px;line-height:26px;display:flex;gap:8px;align-items:center;margin-bottom:12px}
+.fact h4 img{width:24px;height:24px;filter:var(--icon-filter)}
+.fact p{max-width:280px;white-space:pre-line}
+/* project gallery: swipe/drag carousel with dots; shots keep their native 686x425 ratio */
+.gal{margin-top:40px;--gut:max(60px,calc((100vw - 1440px)/2 + 60px));--sh:clamp(200px,30vw,425px);--sw:calc(var(--sh)*686/425)}
+@media (max-width:900px){.gal{--gut:24px;--sh:clamp(180px,48vw,425px)}}
+@media (max-width:480px){.gal{--gut:16px;--sh:calc((100vw - 32px)*425/686)}}
+.track{position:relative;display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;scrollbar-width:none;overscroll-behavior-x:contain;
+  padding-left:var(--gut);padding-right:max(var(--gut),calc(100vw - var(--gut) - var(--sw)));scroll-padding-left:var(--gut);cursor:grab;user-select:none}
+.track::-webkit-scrollbar{display:none}
+.track.drag{cursor:grabbing;scroll-snap-type:none;scroll-behavior:auto}
+.shot{flex:none;width:var(--sw);height:var(--sh);scroll-snap-align:start;border-radius:20px;box-shadow:0 0 0 1px rgba(255,255,255,.14)}
+/* the white ring is invisible by day and outlines dark shots (e.g. PB logo on #1D1D1F) at night */
+.shot.ph{background:var(--gray);display:grid;place-items:center;color:#8C8891;font-size:14px}
+.shot img{width:100%;height:100%;object-fit:contain;pointer-events:none;-webkit-user-drag:none}
+.dots{display:flex;gap:4px;margin-top:20px;margin-left:calc(var(--gut) - 6px)}
+.dots button{border:0;background:none;padding:10px 6px;cursor:pointer;display:grid;place-items:center}
+.dots button::before{content:"";display:block;width:8px;height:8px;border-radius:999px;background:var(--fg);opacity:.25;transition:width .4s var(--ease),opacity .4s var(--ease),background .6s var(--ease)}
+.dots button.on::before{width:28px;opacity:1;background:var(--kicker)}
+.dots button:hover::before{opacity:.6}
+.dots button.on:hover::before{opacity:1}
+
+/* finale */
+.finale{height:260vh;position:relative}
+.finale .stage{position:sticky;top:0;height:100svh;overflow:hidden;display:grid;place-items:center;text-align:center}
+.glow{position:absolute;left:50%;top:50%;width:100vmax;height:100vmax;margin:-50vmax 0 0 -50vmax;border-radius:50%;background:radial-gradient(circle,rgba(var(--glow),1) 0%,rgba(var(--glow),1) 30%,rgba(var(--glow),.55) 46%,rgba(var(--glow),.15) 60%,rgba(var(--glow),0) 70%);transform:scale(0);opacity:0;will-change:transform,opacity}
+.finale .stage{background:var(--bg)}
+.finale .stage.full{background:var(--purple)}
+.ask{position:relative;z-index:2;color:var(--paper);display:grid;gap:40px;justify-items:center;will-change:opacity,transform;padding-inline:16px}
+@media (max-width:480px){.ask p{white-space:normal!important;max-width:300px!important}}
+.ask p{max-width:none;white-space:nowrap;font-size:16px;line-height:22px}
+.ask h2{font-size:clamp(52px,7.2vw,104px);line-height:1.2;max-width:900px}
+.contact{position:absolute;inset:0;z-index:3;display:grid;place-items:center;align-content:center;gap:48px;opacity:0;pointer-events:none;transition:opacity .6s var(--ease)}
+.contact.show{opacity:1;pointer-events:auto}
+.contact h2{font-size:clamp(52px,7.2vw,104px);line-height:1.077;color:var(--final-fg)}
+.finale .tint{position:absolute;inset:0;background:radial-gradient(ellipse 80% 70% at 50% 45%,var(--final-bg) 0%,#4A3C92 55%,#261D55 100%);opacity:0;pointer-events:none}
+.cbtns{display:flex;gap:24px;flex-wrap:wrap;justify-content:center;padding-inline:16px}
+.cbtn{font:inherit;cursor:pointer;min-width:260px;padding:24px 28px;border-radius:20px;border:0;background:var(--cbtn-bg);color:var(--cbtn-fg);display:grid;gap:4px;text-align:left;transition:transform .6s var(--ease),background .6s var(--ease)}
+.cbtn:hover{transform:translateY(-4px) rotate(-1deg)}
+.cbtn:active{transform:scale(.97)}
+.cbtn small{font-size:16px;line-height:22px;color:var(--muted)}
+.cbtn span{font-size:20px;line-height:26px;font-weight:500}
+.cbtn.done{background:var(--ink);color:var(--paper)}
+.cbtn.done small{color:#bdb8c4}
+.foot{position:absolute;left:0;right:0;bottom:24px;font-size:14px;line-height:20px;color:var(--final-fg);opacity:.65}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+}
+</style>
+</head>
+<body>
+
+
+<div class="sunwrap" aria-hidden="true"><div class="sun"></div></div><div class="lamp" aria-hidden="true"></div>
+
+<header class="top">
+  <div class="wrap">
+    <nav class="nav" aria-label="Sekce">
+      <a href="#intro" class="hov on"><span class="roll" data-roll>Intro</span></a>
+      <a href="#cesta" class="hov"><span class="roll" data-roll>Cesta</span></a>
+      <a href="#hodnoty" class="hov"><span class="roll" data-roll>Hodnoty</span></a>
+      <a href="#projekty" class="hov"><span class="roll" data-roll>Projekty</span></a>
+      <a href="#kontakt" class="hov"><span class="roll" data-roll>Kontakt</span></a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="hero" id="intro">
+  <div class="lang" role="group" aria-label="Jazyk / Language"><button type="button" data-lang="cs" aria-pressed="true">CZ</button><button type="button" data-lang="en" aria-pressed="false">ENG</button></div>
+  <div class="pin" data-x=".065" data-y=".08" data-base="270"><img src="assets/pins1.png" alt="Připínáčky" draggable="false"></div>
+  <div class="pin" data-x=".77" data-y=".1" data-base="180"><img src="assets/pins2.png" alt="Kancelářská svorka" draggable="false"></div>
+  <div class="pin" data-x=".8" data-y=".46" data-base="175"><img src="assets/pins3.png" alt="Kancelářské sponky" draggable="false"></div>
+  <div>
+    <p class="kicker">Jmenuji se Anna Brabcová a jsem váš budoucí</p>
+    <h1 aria-label="Product, UI/UX a Graphic Designer"><span class="ln rot" aria-hidden="true"><span class="rw on">Product</span><span class="rw">UI/UX</span><span class="rw">Graphic</span></span><span class="ln" aria-hidden="true"><span>Designer</span></span></h1>
+  </div>
+  <p class="hint"><span class="hand" aria-hidden="true">↔</span> Věci na stole můžete posouvat</p>
+</section>
+
+<section class="statement" id="statement">
+  <div class="stage wrap">
+    <p class="words">Design pro mě není jen o tom, jak|věci vypadají. Zajímá mě, jak fungují,|proč fungují a jak je udělat lepšími.</p>
+  </div>
+</section>
+
+<section class="journey" id="cesta">
+  <svg class="pencil" aria-hidden="true"><path id="pencilPath"/></svg>
+  <div class="wrap">
+    <div class="row r1">
+      <div class="ms">
+        <span class="kicker">2025: PSCC</span>
+        <h2>BcA. v Graphic<br>and Media Design</h2>
+        <p class="body">Studium mi dalo pevné základy vizuální komunikace, typografie a designového myšlení. Naučilo mě nejen tvořit, ale také přemýšlet nad tím, proč věci navrhuji právě tak, jak je navrhuji.</p>
+        <div class="duo">
+          <div class="photo"><div class="clip"><img src="assets/anna.jpg" alt="Anna Brabcová"></div></div>
+          <button class="flip" id="flip" aria-pressed="false" aria-label="Otočit kartičku Fun fact">
+            <span class="in">
+              <span class="face front"><span>Fun fact</span></span>
+              <span class="face back"><span>Část střední školy jsem strávila v Texasu, kde jsem získala ocenění v soutěži Visual Art Scholastic Event pořádané Texas Art Education Association. Takže moje cesta k designu začala o pár tisíc kilometrů dál.</span></span>
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="row r2">
+      <div class="r2-left"><div class="ms lw lw-ocni"><div class="logo-card"><img src="assets/ocniklinika.svg" alt="Oční klinika Horní Počernice"></div></div></div>
+      <div class="r2-right">
+        <div class="ms lw lw-svijany"><div class="logo-card"><img src="assets/svijany.svg" alt="Svijany"></div></div>
+        <div class="ms">
+          <span class="kicker">2023–2025: Socialmind &amp; Designmind</span>
+          <h2>Od vizuální<br>komunikace<br>k webdesignu.</h2>
+          <p class="body">Začínala jsem grafikou pro sociální sítě a postupně se dostala k návrhům webových stránek a vizuálních identit.</p>
+        </div>
+        <div class="ms lw lw-tren"><div class="logo-card"><img src="assets/trenyrkarna.svg" alt="Trenýrkárna.cz"></div></div>
+      </div>
+    </div>
+    <div class="row r3">
+      <div class="ms">
+        <span class="kicker">2025–doposud: Share Yourself</span>
+        <h2>Creative Director</h2>
+        <p class="body">Vedení kreativních projektů mi dává možnost dívat se na design v širších souvislostech. Od prvotního konceptu přes jednotlivá rozhodnutí až po finální výsledek.</p>
+        <button class="video" id="syVideo" type="button" aria-label="Přehrát video Share Yourself ve velkém"><video src="assets/sy-video.mp4" poster="assets/sy-poster.jpg" muted loop playsinline autoplay preload="metadata"></video><span class="vzoom" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1D1D1D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></span></button>
+      </div>
+    </div>
+    <div class="row r4">
+      <div class="ms right">
+        <span class="kicker">2025–doposud: Freelance</span>
+        <h2>Vlastní projekty.<br>Vlastní zodpovědnost.</h2>
+        <p class="body">Jako freelancerka pracuji na různorodých projektech, komunikuji přímo s klienty a hledám řešení, která dávají smysl vizuálně i funkčně.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="traits" id="hodnoty">
+  <div class="stage"><div class="wrap grid">
+    <div><p class="say"><span class="words">Za každým mým projektem stojí trochu jiný příběh. Pět věcí ale zůstává vždycky stejných.</span></p><p class="example" id="example" aria-live="polite"><b></b><span></span></p></div>
+    <div class="deck" id="deck">
+      <button class="tcard" data-w="413" data-t="Týmový hráč" data-ex="Jako Creative Director v Share Yourself vedu kreativní projekty společně s týmem, od prvního konceptu po výsledek."><img src="assets/tymovy-hrac.svg" alt="Týmový hráč: Společně to jde líp"></button>
+      <button class="tcard" data-w="379" data-t="Organizovanost" data-ex="Tři roky jsem souběžně pracovala pro dvě agentury, Socialmind a Designmind, a obě role zvládala naplno."><img src="assets/organizovanost.svg" alt="Organizovanost: I kreativita potřebuje řád"></button>
+      <button class="tcard" data-w="450" data-t="Kreativita" data-ex="Už na střední v Texasu jsem za svou práci získala ocenění na Visual Art Scholastic Event."><img src="assets/kreativita.svg" alt="Kreativita: Myšlení mimo zajeté koleje"></button>
+      <button class="tcard" data-w="424" data-t="Zvídavost" data-ex="Od grafiky pro sociální sítě jsem se dostala k webům a identitám a teď jdu dál, k produktovému designu."><img src="assets/zvidavost.svg" alt="Zvídavost: Neustále o krok dál"></button>
+      <button class="tcard" data-w="386" data-t="Smysl pro detail" data-ex="Ve vizuálních identitách ladím každý detail, od tvaru loga po tiskoviny a e-shop."><img src="assets/smysl-pro-detail.svg" alt="Smysl pro detail: Detailista tělem i duší"></button>
+    </div>
+  </div></div>
+</section>
+
+<section class="projects" id="projekty">
+  <div class="wrap"><h2 class="title">Vybrané projekty</h2></div>
+  <div id="projList"></div>
+</section>
+
+<section class="finale" id="kontakt">
+  <div class="stage">
+    <div class="glow" id="glow"></div>
+    <div class="tint" id="tint"></div>
+    <div class="ask" id="ask">
+      <p>Na začátku jsem říkala, že jsem váš budoucí designer.</p>
+      <h2>Tak co, přesvědčila<br>jsem vás?</h2>
+    </div>
+    <div class="contact" id="contact">
+      <h2>Ozvěte se mi</h2>
+      <div class="cbtns">
+        <button class="cbtn" data-copy="tel"><small>Telefon · kliknutím zkopírujete</small><span data-val="tel">+420 720 474 420</span></button>
+        <button class="cbtn" data-copy="email"><small>E-mail · kliknutím zkopírujete</small><span data-val="email">anisbrabcova@gmail.com</span></button>
+      </div>
+      <p class="foot">© 2026 Anna Brabcová</p>
+    </div>
+  </div>
+</section>
+</main>
+<div class="lbox" id="lbox" role="dialog" aria-modal="true" aria-label="Video Share Yourself"><button class="lx" type="button" aria-label="Zavřít">×</button><video controls playsinline preload="none"></video></div>
+
+
+<script>
+(function(){
+  const root=document.documentElement;
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  root.classList.add('js');
+  const clamp=(v,a=0,b=1)=>Math.min(b,Math.max(a,v));
+  const lerp=(a,b,t)=>a+(b-a)*t;
+  const CONTACT={email:'anisbrabcova@gmail.com',tel:'+420720474420'};
+
+  /* language: chosen in the hero, remembered, applied before anything else builds on the text */
+  let LANG='cs';
+  try{const q=new URLSearchParams(location.search).get('lang');LANG=q||localStorage.getItem('lang')||'cs'}catch(e){}
+  if(LANG!=='en')LANG='cs';
+  root.lang=LANG;
+  document.querySelectorAll('.lang button').forEach(b=>{b.setAttribute('aria-pressed',b.dataset.lang===LANG);
+    b.addEventListener('click',()=>{if(b.dataset.lang===LANG)return;
+      try{localStorage.setItem('lang',b.dataset.lang);const u=new URL(location.href);u.searchParams.delete('lang');history.replaceState(null,'',u);location.reload()}
+      catch(e){location.search='?lang='+b.dataset.lang}})});
+  const EN={
+    '.nav a[href="#intro"] .roll':'Intro','.nav a[href="#cesta"] .roll':'Journey','.nav a[href="#hodnoty"] .roll':'Values','.nav a[href="#projekty"] .roll':'Projects','.nav a[href="#kontakt"] .roll':'Contact',
+    '.hero .kicker':'My name is Anna Brabcová and I am your future',
+    '.hint':'<span class="hand" aria-hidden="true">↔</span> You can move things around the desk',
+    '.statement .words':'Design to me is not just about how|things look. I care about how they work,|why they work and how to make them better.',
+    '.r1 h2':'BcA. in Graphic<br>and Media Design',
+    '.r1 .body':'My studies gave me a solid foundation in visual communication, typography and design thinking. They taught me not only to create, but also to think about why I design things exactly the way I do.',
+    '.flip .back > span':'I spent part of high school in Texas, where I won an award at the Visual Art Scholastic Event organised by the Texas Art Education Association. So my path to design began a few thousand kilometres away.',
+    '.r2 h2':'From visual<br>communication<br>to web design.',
+    '.r2 .body':'I started out with social media graphics and gradually moved on to designing websites and visual identities.',
+    '.r3 .kicker':'2025–present: Share Yourself',
+    '.r3 .body':'Leading creative projects lets me look at design in a wider context. From the first concept through every decision to the final result.',
+    '.r4 .kicker':'2025–present: Freelance',
+    '.r4 h2':'Own projects.<br>Own responsibility.',
+    '.r4 .body':'As a freelancer I work on a wide range of projects, talk directly with clients and look for solutions that make sense both visually and functionally.',
+    '.traits .say .words':'Every project of mine has a slightly different story. But five things always stay the same.',
+    '.projects .title':'Selected projects',
+    '.ask p':'At the beginning I said I was your future designer.',
+    '.ask h2':'So, have I<br>convinced you?',
+    '.contact h2':'Get in touch',
+    '.cbtn[data-copy="tel"] small':'Phone · click to copy',
+    '.cbtn[data-copy="email"] small':'E-mail · click to copy'};
+  const EN_ATTR=[['.hero h1','aria-label','Product, UI/UX and Graphic Designer'],['.nav','aria-label','Sections'],['.pin img','alt',['Push pins','Binder clip','Paper clips']],
+    ['#flip','aria-label','Flip the fun fact card'],['#syVideo','aria-label','Play the Share Yourself video full size'],['#lbox .lx','aria-label','Close'],
+    ['.tcard img','alt',['Team player: Better together','Organisation: Even creativity needs order','Creativity: Thinking outside the box','Curiosity: Always one step further','Attention to detail: A perfectionist at heart']]];
+  const T=LANG==='en'?{ch:'Challenge',so:'Solution',re:'Result',shot:'preview',photos:'Photos of',photo:'Photo',of:'of',copied:'Copied'}:{ch:'Výzva',so:'Řešení',re:'Výsledek',shot:'ukázka',photos:'Fotky projektu',photo:'Fotka',of:'z',copied:'Zkopírováno'};
+  if(LANG==='en'){
+    document.querySelectorAll('.tcard img').forEach(i=>i.src=i.getAttribute('src').replace('.svg','-en.svg'));
+    Object.entries(EN).forEach(([sel,html])=>{const el=document.querySelector(sel);if(el)el.innerHTML=html});
+    EN_ATTR.forEach(([sel,at,v])=>document.querySelectorAll(sel).forEach((el,i)=>el.setAttribute(at,Array.isArray(v)?v[i]:v)));
+  }
+
+  /* navbar letter roll */
+  document.querySelectorAll('[data-roll]').forEach(el=>{
+    const t=el.textContent;el.setAttribute('aria-label',t);el.textContent='';
+    [...t].forEach((c,i)=>{const ch=document.createElement('span');ch.className='ch';ch.setAttribute('aria-hidden','true');ch.style.transitionDelay=(i*14)+'ms';
+      ch.innerHTML='<span></span><span></span>';ch.children[0].textContent=c;ch.children[1].textContent=c;el.appendChild(ch)});
+  });
+
+  /* hero intro */
+  if(!reduce){root.classList.add('pre');document.querySelectorAll('.hero h1 .ln:not(.rot) span').forEach(s=>s.style.transitionDelay='140ms');
+    requestAnimationFrame(()=>setTimeout(()=>root.classList.remove('pre'),80));}
+
+  /* rotating role in hero */
+  const rws=[...document.querySelectorAll('.hero .rw')];let ri=0;
+  if(!reduce)setInterval(()=>{const cur=rws[ri];ri=(ri+1)%rws.length;const nx=rws[ri];
+    cur.classList.remove('on');cur.classList.add('out');nx.style.transition='none';nx.classList.remove('out');void nx.offsetWidth;nx.style.transition='';nx.classList.add('on');
+    setTimeout(()=>{cur.style.transition='none';cur.classList.remove('out');void cur.offsetWidth;cur.style.transition=''},1000)},2600);
+
+  /* draggable pins with inertia */
+  const hero=document.querySelector('.hero');
+  const pins=[...hero.querySelectorAll('.pin')].map(el=>({el,x:0,y:0,vx:0,vy:0,r:0,drag:false}));
+  function placePins(){const W=hero.clientWidth,H=hero.clientHeight,s=W<700?.6:1;
+    pins.forEach(p=>{const base=parseFloat(p.el.dataset.base);p.el.style.width=(base*s)+'px';
+      p.x=clamp(parseFloat(p.el.dataset.x)*W,-20,W-base*s+10);p.y=parseFloat(p.el.dataset.y)*H;if(W<700&&parseFloat(p.el.dataset.y)>.3)p.y=H*.7;});}
+  placePins();addEventListener('resize',placePins);
+  let act=null,off={x:0,y:0},last={x:0,y:0,t:0};
+  pins.forEach(p=>{
+    p.el.addEventListener('pointerdown',e=>{e.preventDefault();p.el.setPointerCapture(e.pointerId);act=p;p.drag=true;p.el.classList.add('drag');
+      const r=hero.getBoundingClientRect();off.x=e.clientX-r.left-p.x;off.y=e.clientY-r.top-p.y;last={x:e.clientX,y:e.clientY,t:performance.now()};p.vx=p.vy=0;});
+    p.el.addEventListener('pointermove',e=>{if(act!==p)return;const r=hero.getBoundingClientRect();const now=performance.now(),dt=Math.max(8,now-last.t);
+      p.vx=(e.clientX-last.x)/dt*16;p.vy=(e.clientY-last.y)/dt*16;last={x:e.clientX,y:e.clientY,t:now};
+      p.x=e.clientX-r.left-off.x;p.y=e.clientY-r.top-off.y;});
+    const up=()=>{if(act!==p)return;act=null;p.drag=false;p.el.classList.remove('drag')};
+    p.el.addEventListener('pointerup',up);p.el.addEventListener('pointercancel',up);
+  });
+  function pinLoop(){const W=hero.clientWidth,H=hero.clientHeight;
+    pins.forEach(p=>{
+      if(!p.drag){p.x+=p.vx;p.y+=p.vy;p.vx*=.9;p.vy*=.9;const w=p.el.offsetWidth,h=p.el.offsetHeight;
+        if(p.x<-w*.3){p.x=-w*.3;p.vx*=-.5}if(p.x>W-w*.7){p.x=W-w*.7;p.vx*=-.5}if(p.y<0){p.y=0;p.vy*=-.5}if(p.y>H-h*.6){p.y=H-h*.6;p.vy*=-.5}}
+      const tr=p.drag?clamp(p.vx*1.2,-14,14):0;p.r+=(tr-p.r)*.12;
+      p.el.style.transform=`translate3d(${p.x}px,${p.y}px,0) rotate(${p.r}deg) scale(${p.drag?1.06:1})`;});
+    requestAnimationFrame(pinLoop);}
+  requestAnimationFrame(pinLoop);
+
+  /* split words for scroll-loaded text */
+  /* "|" in the text marks a fixed line break (desktop only) */
+  const wordSets=[...document.querySelectorAll('.words')].map(el=>{const t=el.textContent;el.setAttribute('aria-label',t.replace(/\|/g,' '));el.textContent='';
+    return t.split('|').flatMap((line,li)=>{if(li){const br=document.createElement('br');br.className='lb';el.append(br)}
+      return line.trim().split(' ').map(w=>{const s=document.createElement('span');s.className='wd';s.setAttribute('aria-hidden','true');s.textContent=w;el.append(s,' ');return s})})});
+
+  /* fun fact flip + occasional wiggle */
+  const flip=document.getElementById('flip');
+  flip.addEventListener('click',()=>{flip.setAttribute('aria-pressed',flip.getAttribute('aria-pressed')!=='true');flip.dataset.seen='1'});
+  if(!reduce)setInterval(()=>{if(flip.dataset.seen)return;const r=flip.getBoundingClientRect();if(r.top>innerHeight||r.bottom<0)return;
+    flip.classList.remove('wiggle');void flip.offsetWidth;flip.classList.add('wiggle')},3200);
+
+  /* trait cards: click a background card to swap it with the front one */
+  const deck=document.getElementById('deck');const cards=[...deck.querySelectorAll('.tcard')];
+  const DW=840,DH=740,SLOTS=[{x:190,y:0},{x:460,y:285},{x:250,y:235},{x:410,y:20},{x:0,y:165}]; /* last slot = front, top left */
+  let slotOf=cards.map((c,i)=>i);
+  function layoutDeck(){cards.forEach((c,i)=>{const s=SLOTS[slotOf[i]];c.style.left=(s.x/DW*100)+'%';c.style.top=(s.y/DH*100)+'%';c.style.width=(c.dataset.w/DW*100)+'%';
+    c.style.zIndex=slotOf[i]+1;const front=slotOf[i]===SLOTS.length-1;c.classList.toggle('front',front);c.setAttribute('aria-pressed',front)});
+    /* caption under the claim names a concrete example for the card in front */
+    const fc=cards[slotOf.indexOf(SLOTS.length-1)],exEl=document.getElementById('example');
+    const put=()=>{exEl.querySelector('b').textContent=fc.dataset.t;exEl.querySelector('span').textContent=fc.dataset.ex;exEl.classList.remove('swap')};
+    if(exEl.querySelector('b').textContent){exEl.classList.add('swap');setTimeout(put,250)}else put();}
+  layoutDeck();
+  cards.forEach((c,i)=>c.addEventListener('click',()=>{const fi=slotOf.indexOf(SLOTS.length-1);if(fi===i)return;
+    const tmp=slotOf[i];slotOf[i]=slotOf[fi];slotOf[fi]=tmp;layoutDeck();c.style.zIndex=20;setTimeout(()=>c.style.zIndex=slotOf[i]+1,900);deck.dataset.used='1'}));
+  /* the least visible card (bottom right) wiggles now and then */
+  if(!reduce)setInterval(()=>{if(deck.dataset.used)return;const r=deck.getBoundingClientRect();if(r.top>innerHeight||r.bottom<0)return;
+    const c=cards[slotOf.indexOf(1)];c.classList.remove('wig');void c.offsetWidth;c.classList.add('wig')},3000);
+
+  /* projects */
+  const P=[
+    ['2024','True Original','Srozumitelně představit komplexní technologii digitálního ověřování dokumentů a její přínosy.','Přehledná struktura webu a vizuální ukázky, které uživatele krok za krokem provedou službou.','Komplexní prezentační web'],
+    ['2026','Budzexpres','Vytvořit konverzní e-shop s konopnými produkty, který zohledňuje specifická reklamní omezení tohoto odvětví.','Přehledná UX struktura, intuitivní nákupní proces a design přizpůsobený konverzím i požadavkům reklamních platforem.','E-shop'],
+    ['2026','Goteo','Propojit hravou ženskou estetiku značky s přehledným e-shopem zaměřeným na nákup.','Čistý design, intuitivní navigace a jemné ilustrace podtrhující osobnost značky.','E-shop'],
+    ['2025','Guilty Wines','Odlišit obchod s výběrovými víny od konkurence a podtrhnout jeho prémiový charakter.','Elegantní symbol, výrazná typografie a sofistikovaná paleta olivových a burgundy tónů.','Vizuální identita\nTiskoviny\nE-shop'],
+    ['2026','Dva Pět Šest','Sjednotit hudbu, koncerty, novinky a merchandise interpreta na jednom místě.','Přehledný one-page web s intuitivní navigací a propojením na e-shop.','Webová prezentace\nE-shop'],
+    ['2026','SINPPS','Modernizovat zastaralou identitu projekční společnosti zaměřené na dopravní infrastrukturu.','Minimalistický logotyp s upravenou typografií inspirovanou tvary silnic.','Vizuální identita\nTiskoviny\nMerchandise'],
+    ['2025','Patrik Berger Football Agency','Propojit prestiž známého jména s tradiční estetikou anglického fotbalu.','Monogram PB s motivem fotbalového míče a prémiovým stříbrným provedením.','Vizuální identita\nTiskoviny\nWeb']
+  ];
+  const P_EN=[
+    ['2024','True Original','Clearly present a complex digital document verification technology and its benefits.','A clear website structure and visual examples that guide users through the service step by step.','Comprehensive presentation website'],
+    ['2026','Budzexpres','Create a high-converting e-shop for hemp products that works within the specific advertising restrictions of the industry.','A clear UX structure, an intuitive checkout and a design tuned for conversions and for the requirements of ad platforms.','E-shop'],
+    ['2026','Goteo','Connect the brand’s playful feminine aesthetic with a clear, purchase-focused e-shop.','Clean design, intuitive navigation and delicate illustrations that bring out the brand’s personality.','E-shop'],
+    ['2025','Guilty Wines','Set a fine wine shop apart from the competition and underline its premium character.','An elegant symbol, bold typography and a refined palette of olive and burgundy tones.','Visual identity\nPrint\nE-shop'],
+    ['2026','Dva Pět Šest','Bring the artist’s music, concerts, news and merchandise together in one place.','A clear one-page website with intuitive navigation linked to the e-shop.','Website\nE-shop'],
+    ['2026','SINPPS','Modernise the outdated identity of an engineering firm focused on transport infrastructure.','A minimalist logotype with adjusted typography inspired by the shapes of roads.','Visual identity\nPrint\nMerchandise'],
+    ['2025','Patrik Berger Football Agency','Combine the prestige of a well-known name with the traditional aesthetics of English football.','A PB monogram with a football motif and a premium silver finish.','Visual identity\nPrint\nWebsite']];
+  const SHOTS=[['true',5],['budz',5],['goteo',5],['gw',8],['256',5],['sinpps',5],['pb',5]];
+  const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+  document.getElementById('projList').innerHTML=(LANG==='en'?P_EN:P).map((p,pi)=>`<article class="proj"><div class="inner">
+    <div class="wrap"><span class="kicker yr">${p[0]}</span><h3>${esc(p[1])}</h3>
+    <div class="facts"><div class="fact"><h4><img src="assets/vyzva.svg" alt="">${T.ch}</h4><p>${esc(p[2])}</p></div>
+    <div class="fact"><h4><img src="assets/reseni.svg" alt="">${T.so}</h4><p>${esc(p[3])}</p></div>
+    <div class="fact"><h4><img src="assets/vysledek.svg" alt="">${T.re}</h4><p>${esc(p[4])}</p></div></div></div>
+    <div class="gal"><div class="track">${SHOTS[pi][1]===0?Array.from({length:4},()=>`<div class="shot ph">Obrázek</div>`).join(''):Array.from({length:SHOTS[pi][1]},(_,i)=>`<div class="shot"><img src="assets/proj/${SHOTS[pi][0]}${SHOTS[pi][0]==='256'?'-':''}${i+1}.webp" alt="${esc(p[1])}, ${T.shot} ${i+1}" loading="lazy" draggable="false"></div>`).join('')}</div>
+    <div class="dots" role="group" aria-label="${T.photos} ${esc(p[1])}">${Array.from({length:SHOTS[pi][1]||4},(_,i)=>`<button type="button" aria-label="${T.photo} ${i+1} ${T.of} ${SHOTS[pi][1]||4}"${i?'':' class="on" aria-current="true"'}></button>`).join('')}</div></div>
+  </div></article>`).join('');
+  const projs=[...document.querySelectorAll('.proj')].map(el=>({el,inner:el.querySelector('.inner')}));
+  /* galleries: dots jump to a shot, active dot follows scroll, mouse can drag */
+  document.querySelectorAll('.gal').forEach(gal=>{
+    const track=gal.querySelector('.track'),shots=[...track.children],dots=[...gal.querySelectorAll('.dots button')];
+    const pad=()=>parseFloat(getComputedStyle(track).paddingLeft)||0;
+    const go=i=>track.scrollTo({left:shots[i].offsetLeft-pad()});
+    const near=()=>{let b=0,d=1e9;shots.forEach((s,i)=>{const k=Math.abs(s.offsetLeft-pad()-track.scrollLeft);if(k<d){d=k;b=i}});return b};
+    let cur=0;const mark=()=>{const i=near();if(i===cur)return;cur=i;dots.forEach((d,j)=>{d.classList.toggle('on',j===i);j===i?d.setAttribute('aria-current','true'):d.removeAttribute('aria-current')})};
+    track.addEventListener('scroll',()=>requestAnimationFrame(mark),{passive:true});
+    dots.forEach((d,i)=>d.addEventListener('click',()=>go(i)));
+    let sx=0,sl=0,down=false,moved=false;
+    track.addEventListener('pointerdown',e=>{if(e.pointerType!=='mouse')return;down=true;moved=false;sx=e.clientX;sl=track.scrollLeft;track.classList.add('drag');track.setPointerCapture(e.pointerId)});
+    track.addEventListener('pointermove',e=>{if(!down)return;const dx=e.clientX-sx;if(Math.abs(dx)>3)moved=true;track.scrollLeft=sl-dx});
+    const up=e=>{if(!down)return;down=false;track.classList.remove('drag');const dx=e.clientX-sx,i=near();
+      go(moved&&Math.abs(dx)>40&&i===cur?Math.max(0,Math.min(shots.length-1,cur+(dx<0?1:-1))):i)};
+    track.addEventListener('pointerup',up);track.addEventListener('pointercancel',up);
+  });
+
+  /* pencil line */
+  const journey=document.getElementById('cesta'),svg=journey.querySelector('.pencil'),path=document.getElementById('pencilPath');
+  let pathLen=1;
+  function buildPencil(){const endEl=journey.querySelector('.r4 h2');const h=Math.max(200,endEl.getBoundingClientRect().bottom-journey.getBoundingClientRect().top);svg.setAttribute('viewBox',`0 0 40 ${h}`);svg.setAttribute('height',h);
+    let d='M20 0';let seed=7;const rnd=()=>{seed=(seed*9301+49297)%233280;return seed/233280};
+    for(let y=24;y<=h;y+=24){const x=20+Math.sin(y/90)*1.4+(rnd()-.5)*1.6;d+=` L${x.toFixed(2)} ${y}`}
+    path.setAttribute('d',d);pathLen=path.getTotalLength();path.style.strokeDasharray=pathLen;}
+  const mss=[...journey.querySelectorAll('.ms')];
+
+  /* scroll engine */
+  const statement=document.getElementById('statement'),traitsSec=document.getElementById('hodnoty');
+  const glow=document.getElementById('glow'),ask=document.getElementById('ask'),contact=document.getElementById('contact'),finale=document.getElementById('kontakt'),tint=document.getElementById('tint'),stage=finale.querySelector('.stage');
+  const navLinks=[...document.querySelectorAll('.nav a')],topBar=document.querySelector('.top');
+  const prog=el=>{const r=el.getBoundingClientRect();return clamp(-r.top/(r.height-innerHeight))};
+  let ticking=false;
+  function frame(){
+    ticking=false;const vh=innerHeight;
+    const sp=reduce?1:clamp(prog(statement)*1.08);const ws=wordSets[0];ws.forEach((w,i)=>w.classList.toggle('lit',i<sp*ws.length));
+    const tp=reduce?1:clamp(prog(traitsSec)*1.15);const ws2=wordSets[1];ws2.forEach((w,i)=>w.classList.toggle('lit',i<tp*ws2.length));
+    const jr=journey.getBoundingClientRect();const pen=vh*.65;const ph=parseFloat(svg.getAttribute('height'))||jr.height;const jp=reduce?1:clamp((pen-jr.top)/ph);
+    path.style.strokeDashoffset=pathLen*(1-jp);
+    mss.forEach(m=>{if(reduce||m.getBoundingClientRect().top<pen+40)m.classList.add('on')});
+    projs.forEach(p=>{const r=p.el.getBoundingClientRect();if(r.bottom<-200||r.top>vh+200)return;
+      const e=reduce?1:clamp((vh-r.top)/(vh*.7));const k=1-Math.pow(1-e,3);
+      p.inner.style.transform=`rotateX(${lerp(28,0,k)}deg) translateZ(${lerp(-260,0,k)}px) translateY(${lerp(80,0,k)}px)`;p.inner.style.opacity=lerp(.15,1,k);});
+    const fp=prog(finale);
+    /* scale at which the solid core (30% of radius) covers the whole viewport */
+    const vmax=Math.max(innerWidth,vh),full=(Math.hypot(innerWidth,vh)/2)/(0.30*0.5*vmax);
+    const g=reduce?1:clamp(fp/.88);const gs=lerp(0,full*1.02,Math.pow(g,1.6));
+    /* grows out of nothing: starts at zero size and fades in, so no dot shows on arrival */
+    glow.style.transform=`scale(${gs})`;glow.style.opacity=reduce?1:clamp(g/.25);
+    const t=clamp((fp-.12)/.25);
+    ask.style.opacity=reduce?(fp>.88?0:1):t*(1-clamp((fp-.8)/.08));ask.style.transform=`translateY(${lerp(24,0,t)}px)`;
+    const isFull=g>=1;stage.classList.toggle('full',isFull);contact.classList.toggle('show',isFull);
+    tint.style.opacity=reduce?(isFull?1:0):clamp((fp-.74)/.14);
+    dayFrame();
+    topBar.classList.toggle('show',hero.getBoundingClientRect().bottom<vh*.25);
+    const ids=['intro','cesta','hodnoty','projekty','kontakt'];let cur='intro';
+    ids.forEach(id=>{if(document.getElementById(id).getBoundingClientRect().top<vh*.5)cur=id});
+    navLinks.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+cur));
+  }
+  /* time of day: keyframes anchored to sections, interpolated by scroll position */
+  const sunEl=document.querySelector('.sunwrap'),lampEl=document.querySelector('.lamp');
+  const DAY=[ // o: shadow strength, s2: extra depth for low sun, sx/sy/sk/ty: shadow length and lean, b: page brightness (255 white to 14 at night, darker than the #1D1D1F project shots), l: lamp light
+    {o:1,s2:1,sx:1.25,sy:1.2,sk:-10,ty:3,b:255,l:0},
+    {o:.85,s2:.4,sx:1.12,sy:1.1,sk:-5,ty:1,b:255,l:0},
+    {o:.35,s2:0,sx:1,sy:1,sk:0,ty:-4,b:252,l:0},
+    {o:.75,s2:.3,sx:1.15,sy:1.2,sk:8,ty:2,b:236,l:0},
+    {o:0,s2:0,sx:1.4,sy:1.4,sk:14,ty:8,b:14,l:.55},
+    {o:0,s2:0,sx:1.4,sy:1.4,sk:14,ty:8,b:14,l:.55}];
+  let dayAt=[],dayK=0;
+  function dayAnchors(){const y=el=>el.getBoundingClientRect().top+scrollY;const k=y(finale);
+    const arts=document.querySelectorAll('#projList .proj'),a4=arts[4]?y(arts[4]):k;
+    /* fully dark by the 4th project, so projects up to Guilty Wines read on light and Dva Pět Šest onward on dark */
+    const a3=arts[3]?y(arts[3]):a4;
+    dayK=k;dayAt=[0,y(journey),y(traitsSec),a3,a4,k+finale.offsetHeight*.45];}
+  function dayFrame(){if(!dayAt.length)dayAnchors();const y=scrollY;let i=0;while(i<dayAt.length-2&&y>dayAt[i+1])i++;
+    let t=clamp((y-dayAt[i])/Math.max(1,dayAt[i+1]-dayAt[i]));t=t*t*(3-2*t);const a=DAY[i],b=DAY[i+1],m=k=>lerp(a[k],b[k],t);
+    const g=Math.round(m('b')),night=g<110;
+    sunEl.style.opacity=m('o');sunEl.style.setProperty('--s2',m('s2'));sunEl.style.transform=`translateY(${m('ty')}vh) skewX(${m('sk')}deg) scale(${m('sx')},${m('sy')})`;
+    root.style.setProperty('--bg',`rgb(${g},${g},${Math.min(255,g+2)})`);
+    if(night!==dayNight){dayNight=night;root.style.setProperty('--fg',night?'var(--paper)':'var(--ink)');root.style.setProperty('--fg-muted',night?'rgba(255,255,255,.6)':'var(--muted)');
+      root.style.setProperty('--kicker',night?'var(--paper)':'var(--deep)');root.style.setProperty('--icon-filter',night?'brightness(0) invert(1)':'none');}
+    /* lamp light only in the finale, so it never washes over project shots */
+    lampEl.style.opacity=m('l')*clamp((y-dayK+innerHeight*.5)/innerHeight);}
+  let dayNight=null;
+  const req=()=>{if(!ticking){ticking=true;requestAnimationFrame(frame)}};
+  addEventListener('scroll',req,{passive:true});
+  function gapFix(){const sp=document.querySelector('.statement p');const gap=parseFloat(getComputedStyle(root).getPropertyValue('--gap'))||200;
+    const below=(innerHeight-sp.offsetHeight)/2;/* the claim gets extra air before the journey: 1.6x the section gap (320px desktop) */
+    journey.style.marginTop=(gap*1.6-below)+'px';}
+  gapFix();
+  addEventListener('resize',()=>{gapFix();buildPencil();dayAnchors();req()});
+  addEventListener('load',()=>{buildPencil();dayAnchors();req()});
+  if(document.fonts)document.fonts.ready.then(()=>{gapFix();buildPencil();req()});
+  buildPencil();frame();
+
+  /* Share Yourself video: click enlarges it into a lightbox with sound and controls */
+  const syv=document.getElementById('syVideo'),lbox=document.getElementById('lbox'),lv=lbox.querySelector('video');
+  const lbClose=()=>{lbox.classList.remove('open');lv.pause();syv.querySelector('video').play().catch(()=>{});syv.focus()};
+  syv.addEventListener('click',()=>{const pv=syv.querySelector('video');if(!lv.src)lv.src=pv.currentSrc||pv.src;
+    lv.currentTime=pv.currentTime||0;pv.pause();lbox.classList.add('open');lv.muted=false;lv.play().catch(()=>{});lbox.querySelector('.lx').focus()});
+  lbox.addEventListener('click',e=>{if(e.target===lbox||e.target.classList.contains('lx'))lbClose()});
+  addEventListener('keydown',e=>{if(e.key==='Escape'&&lbox.classList.contains('open'))lbClose()});
+
+  /* copy contacts */
+  document.querySelectorAll('[data-copy]').forEach(b=>{
+    b.addEventListener('click',()=>{const val=CONTACT[b.dataset.copy];
+      const done=()=>{b.classList.add('done');const roll=b.querySelector('.roll');const span=b.querySelector('[data-val]');
+        if(roll){roll.style.display='none';b.insertAdjacentHTML('beforeend','<span class="msg">'+T.copied+'</span>')}
+        if(span){span.dataset.prev=span.textContent;span.textContent=T.copied}
+        setTimeout(()=>{b.classList.remove('done');if(roll){roll.style.display='';b.querySelector('.msg')?.remove()}if(span)span.textContent=span.dataset.prev},1800)};
+      try{navigator.clipboard.writeText(val).then(done,done)}catch(e){done()}});
+  });
+})();
+</script>
+
+</body>
+</html>
