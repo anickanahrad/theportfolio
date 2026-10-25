@@ -269,7 +269,7 @@ img{display:block;max-width:100%}
 .projects .title{font-size:clamp(56px,8.9vw,128px);line-height:1.078;text-align:center;margin-bottom:80px}
 .proj{perspective:1400px;margin-bottom:var(--gap)}
 .proj:last-child{margin-bottom:0}
-.proj .inner{transform-origin:50% 100%;will-change:transform}
+.proj .inner{transform-origin:50% 100%}
 .proj .yr{display:block;margin-bottom:8px;color:var(--fg)}
 .proj h3{font-size:clamp(40px,4.45vw,64px);line-height:1.125}
 .facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:48px;margin-top:40px;max-width:900px}
@@ -658,7 +658,8 @@ img{display:block;max-width:100%}
     mss.forEach(m=>{if(reduce||m.getBoundingClientRect().top<pen+40)m.classList.add('on')});
     projs.forEach(p=>{const r=p.el.getBoundingClientRect();if(r.bottom<-200||r.top>vh+200)return;
       const e=reduce?1:clamp((vh-r.top)/(vh*.7));const k=1-Math.pow(1-e,3);
-      p.inner.style.transform=`rotateX(${lerp(28,0,k)}deg) translateZ(${lerp(-260,0,k)}px) translateY(${lerp(80,0,k)}px)`;p.inner.style.opacity=lerp(.15,1,k);});
+      /* once settled, drop the 3D transform and layer hint: a layer promoted while far back is rasterised small and stays blurry */
+      const done=k>=.999;p.inner.style.transform=done?'none':`rotateX(${lerp(28,0,k)}deg) translateZ(${lerp(-260,0,k)}px) translateY(${lerp(80,0,k)}px)`;p.inner.style.willChange=done?'auto':'transform';p.inner.style.opacity=done?'':lerp(.15,1,k);});
     const fp=prog(finale);
     /* scale at which the solid core (30% of radius) covers the whole viewport */
     const vmax=Math.max(innerWidth,vh),full=(Math.hypot(innerWidth,vh)/2)/(0.30*0.5*vmax);
