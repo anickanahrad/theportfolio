@@ -527,22 +527,33 @@ img{display:block;max-width:100%}
   const pins=[...hero.querySelectorAll('.pin')].map(el=>({el,x:0,y:0,vx:0,vy:0,r:0,drag:false}));
   function placePins(){const W=hero.clientWidth,H=hero.clientHeight,s=W<700?.6:1;
     pins.forEach(p=>{const base=parseFloat(p.el.dataset.base);p.el.style.width=(base*s)+'px';
-      p.x=clamp(parseFloat(p.el.dataset.x)*W,-20,W-base*s+10);p.y=parseFloat(p.el.dataset.y)*H;if(W<700&&parseFloat(p.el.dataset.y)>.3)p.y=H*.7;});}
+      p.x=clamp(parseFloat(p.el.dataset.x)*W,16,W-base*s-16);p.y=parseFloat(p.el.dataset.y)*H;if(W<700&&parseFloat(p.el.dataset.y)>.3)p.y=H*.7;});}
   placePins();addEventListener('resize',placePins);
   let act=null,off={x:0,y:0},last={x:0,y:0,t:0};
+  /* items stay fully on the desk: past the edge they resist while dragged, then spring back with a small bounce */
+  const EDGE=16,PULL=28;
+  function bounds(p){const w=p.el.offsetWidth,h=p.el.offsetHeight;return{x0:EDGE,x1:Math.max(EDGE,hero.clientWidth-w-EDGE),y0:EDGE,y1:Math.max(EDGE,hero.clientHeight-h-EDGE)}}
+  function rubber(v,lo,hi){if(v<lo)return lo-PULL*(1-1/((lo-v)/PULL+1));if(v>hi)return hi+PULL*(1-1/((v-hi)/PULL+1));return v}
   pins.forEach(p=>{
     p.el.addEventListener('pointerdown',e=>{e.preventDefault();p.el.setPointerCapture(e.pointerId);act=p;p.drag=true;p.el.classList.add('drag');
       const r=hero.getBoundingClientRect();off.x=e.clientX-r.left-p.x;off.y=e.clientY-r.top-p.y;last={x:e.clientX,y:e.clientY,t:performance.now()};p.vx=p.vy=0;});
     p.el.addEventListener('pointermove',e=>{if(act!==p)return;const r=hero.getBoundingClientRect();const now=performance.now(),dt=Math.max(8,now-last.t);
       p.vx=(e.clientX-last.x)/dt*16;p.vy=(e.clientY-last.y)/dt*16;last={x:e.clientX,y:e.clientY,t:now};
-      p.x=e.clientX-r.left-off.x;p.y=e.clientY-r.top-off.y;});
+      const b=bounds(p);p.x=rubber(e.clientX-r.left-off.x,b.x0,b.x1);p.y=rubber(e.clientY-r.top-off.y,b.y0,b.y1);});
     const up=()=>{if(act!==p)return;act=null;p.drag=false;p.el.classList.remove('drag')};
     p.el.addEventListener('pointerup',up);p.el.addEventListener('pointercancel',up);
   });
   function pinLoop(){const W=hero.clientWidth,H=hero.clientHeight;
     pins.forEach(p=>{
-      if(!p.drag){p.x+=p.vx;p.y+=p.vy;p.vx*=.9;p.vy*=.9;const w=p.el.offsetWidth,h=p.el.offsetHeight;
-        if(p.x<-w*.3){p.x=-w*.3;p.vx*=-.5}if(p.x>W-w*.7){p.x=W-w*.7;p.vx*=-.5}if(p.y<0){p.y=0;p.vy*=-.5}if(p.y>H-h*.6){p.y=H-h*.6;p.vy*=-.5}}
+      if(!p.drag){const b=bounds(p);
+        /* outside the desk after release: spring pulls it back in */
+        if(p.x<b.x0)p.vx+=(b.x0-p.x)*.12;else if(p.x>b.x1)p.vx+=(b.x1-p.x)*.12;
+        if(p.y<b.y0)p.vy+=(b.y0-p.y)*.12;else if(p.y>b.y1)p.vy+=(b.y1-p.y)*.12;
+        const ix=p.x>=b.x0&&p.x<=b.x1,iy=p.y>=b.y0&&p.y<=b.y1;
+        p.x+=p.vx;p.y+=p.vy;p.vx*=.9;p.vy*=.9;
+        /* thrown into a wall from inside: bounce off it */
+        if(ix){if(p.x<b.x0){p.x=b.x0;p.vx=Math.abs(p.vx)*.6}else if(p.x>b.x1){p.x=b.x1;p.vx=-Math.abs(p.vx)*.6}}
+        if(iy){if(p.y<b.y0){p.y=b.y0;p.vy=Math.abs(p.vy)*.6}else if(p.y>b.y1){p.y=b.y1;p.vy=-Math.abs(p.vy)*.6}}}
       const tr=p.drag?clamp(p.vx*1.2,-14,14):0;p.r+=(tr-p.r)*.12;
       p.el.style.transform=`translate3d(${p.x}px,${p.y}px,0) rotate(${p.r}deg) scale(${p.drag?1.06:1})`;});
     requestAnimationFrame(pinLoop);}
